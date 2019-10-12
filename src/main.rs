@@ -8,14 +8,63 @@ use utils::{Dtype,gamma,sfun,Params};
 #[allow(unused)]
 extern crate ndarray;
 use ndarray::{Array};
+extern crate clap;
+use clap::{App, Arg};
 
 #[allow(unused)]
 fn main(){
-    // Initialization
-    let opt= Params{m:2,s:3,d:1,e:3};
+    let matches = App::new("GlobalAli")
+        .arg(
+            Arg::with_name("input")
+            .short("i")
+            .long("input-seq")
+            .help("input sequences")
+            .required(true)
+            .multiple(true)
+            .number_of_values(2)
+            )
+           .arg(
+            Arg::with_name("d param")
+            .short("d")
+            .long("dparam")
+            .help( "the d param")
+            .default_value("3")
+            .required(false)
+        )
+    .arg(
+            Arg::with_name("s param")
+            .short("s")
+            .long("sparam")
+            .help( "the s param")
+            .default_value("3")
+        )
+    .arg(
+            Arg::with_name("m param")
+            .short("m")
+            .long("mparam")
+            .help( "the m param")
+            .default_value("3")
+        )
+    .arg(
+            Arg::with_name("e param")
+            .short("e")
+            .long("eparam")
+            .help( "the e param")
+            .default_value("3")
+        )
+        .get_matches();
     
-    let s1 = "agta".as_bytes();
-    let s2 = "ata".as_bytes();
+    // Initialization
+    let opt= Params{
+
+        m: matches.value_of("m param").unwrap().parse::<Dtype>().unwrap(),
+        s: matches.value_of("s param").unwrap().parse::<Dtype>().unwrap(),
+        d: matches.value_of("d param").unwrap().parse::<Dtype>().unwrap(),
+        e: matches.value_of("e param").unwrap().parse::<Dtype>().unwrap(),
+    };
+    let s:Vec<&str> = matches.values_of("input").unwrap().collect();
+    let s1 = s[0].as_bytes();
+    let s2 = s[1].as_bytes();
 
     let n1 = s1.len() + 1;
     let n2 = s2.len() + 1;
