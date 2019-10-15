@@ -1,5 +1,5 @@
 # Install
-- Install the ![rustlang tools](https://www.rust-lang.org/tools/install) (macosx and linux).
+- Install the [rustlang tools](https://www.rust-lang.org/tools/install) (macosx and linux).
 - First compile with `$ cargo build` from the root directory, the compiled ELF file is in target/debug/globalali
 ```bash
 $ ./target/debug/globalali -h
