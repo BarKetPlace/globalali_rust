@@ -3,7 +3,6 @@
 mod utils;
 use utils::{Dtype,gamma,sfun,Params};
 
-
 #[macro_use]
 #[allow(unused)]
 extern crate ndarray;
@@ -13,7 +12,7 @@ use clap::{App, Arg};
 
 #[allow(unused)]
 fn main(){
-    let matches = App::new("GlobalAli")
+    let matches = App::new("GlobalAli\nDefine: Gamma(n) = (d-e) + n*e")
         .arg(
             Arg::with_name("input")
             .short("i")
@@ -27,54 +26,55 @@ fn main(){
             Arg::with_name("d param")
             .short("d")
             .long("dparam")
-            .help( "the d param")
-            .default_value("3")
+            .help( "(d-e) Gamma function intercept ")
+            .default_value("1")
             .required(false)
         )
     .arg(
             Arg::with_name("s param")
             .short("s")
             .long("sparam")
-            .help( "the s param")
-            .default_value("3")
+            .help( "Different elts.")
+            .default_value("2")
+            .required(false)
         )
     .arg(
             Arg::with_name("m param")
             .short("m")
             .long("mparam")
-            .help( "the m param")
+            .help( "Value for Similar elts.")
             .default_value("3")
+            .required(false)
         )
     .arg(
             Arg::with_name("e param")
             .short("e")
             .long("eparam")
-            .help( "the e param")
-            .default_value("3")
+            .help( "Gamma function steep")
+            .default_value("1")
+            .required(false)
         )
         .get_matches();
     
     // Initialization
     let opt= Params{
-
         m: matches.value_of("m param").unwrap().parse::<Dtype>().unwrap(),
         s: matches.value_of("s param").unwrap().parse::<Dtype>().unwrap(),
         d: matches.value_of("d param").unwrap().parse::<Dtype>().unwrap(),
         e: matches.value_of("e param").unwrap().parse::<Dtype>().unwrap(),
     };
+    
     let s:Vec<&str> = matches.values_of("input").unwrap().collect();
     let s1 = s[0].as_bytes();
     let s2 = s[1].as_bytes();
 
     let n1 = s1.len() + 1;
     let n2 = s2.len() + 1;
-    
+
     let mut v = Array::from_elem((n1,n2), 0. as Dtype);
     let mut f = Array::from_elem((n1,n2), 0. as Dtype);
     let mut g = Array::from_elem((n1,n2), 0. as Dtype);
     let mut h = Array::from_elem((n1,n2), 0. as Dtype);
-
-    
 
     for i in 0..n1 {
         v[[i,0]] = gamma(i as i32, opt.d, opt.e);
